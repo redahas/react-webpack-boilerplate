@@ -1,36 +1,41 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin');
-const path = require('path');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const paths = require('./paths');
 
 module.exports = {
-  entry: path.resolve(__dirname, '../', 'src/app'),
+  entry: paths.entryPath,
   output: {
-    path: path.resolve(__dirname, '../', 'build'),
+    path: paths.outputPath,
     filename: 'bundle.js',
     chunkFilename: '[name].lazy-chunk.js'
   },
+  resolve: {
+    alias: paths.alias,
+  },
   plugins: [
-    new HtmlWebpackPlugin(),
-    new HtmlWebpackExternalsPlugin({
-      externals: [
-        {
-          module: 'react',
-          entry: 'https://unpkg.com/react@16/umd/react.development.js',
-          global: 'React',
-        },
-        {
-          module: 'react-dom',
-          entry: 'https://unpkg.com/react-dom@16/umd/react-dom.development.js',
-          global: 'ReactDOM',
-        },
-      ],
+    new ProgressBarPlugin(),
+    new HtmlWebpackPlugin({
+      title: 'S I C C - A P P',
+    }),
+    new FaviconsWebpackPlugin({
+      logo: paths.favicon,
+      prefix: 'icons-[hash]/',
+      persistentCache: true,
+      inject: true,
+      title: 'favicon',
+      icons: {
+        android: false,
+        appleIcon: false,
+        appleStartup: false,
+        coast: false,
+        favicons: true,
+        firefox: false,
+        opengraph: false,
+        twitter: false,
+        yandex: false,
+        windows: false
+      }
     })
   ],
 };
-
-// // Dev CDN externals
-// <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-// <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-// // Production CDN externals
-// <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-// <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
